@@ -6,7 +6,7 @@ const Users = () => {
     {
       id: "u1",
       name: "Test User",
-      image: "blank.url",
+      image: "../../../public/42982560.jpeg",
       places: 3
     }
   ];
