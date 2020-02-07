@@ -6,6 +6,7 @@ import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH
 } from "../../shared/util/validators";
+import { useForm } from "../../shared/hooks/form-hook";
 
 const DUMMY_PLACES = [
   {
@@ -34,6 +35,20 @@ const UpdatePlace = () => {
   const placeId = useParams().placeId;
   const identifiedPlace = DUMMY_PLACES.find(place => place.id === placeId);
 
+  const [formState, inputHandler] = useForm(
+    {
+      title: { value: identifiedPlace.title, isValid: true },
+      description: { value: identifiedPlace.description, isValid: true }
+    },
+    true
+  );
+
+  const placeUpdateSubmitHandler = (event) => {
+    event.preventDefault();
+    console.log(formState.inputs);
+    
+  };
+
   if (!identifiedPlace) {
     return (
       <div className="center">
@@ -43,7 +58,7 @@ const UpdatePlace = () => {
   }
 
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={placeUpdateSubmitHandler}>
       <Input
         id="title"
         element="input"
@@ -51,9 +66,9 @@ const UpdatePlace = () => {
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Enter a valid Title"
-        onInput={() => {}}
-        value={identifiedPlace.title}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.title.value}
+        initialValid={formState.inputs.title.isValid}
       />
       <Input
         id="description"
@@ -61,11 +76,13 @@ const UpdatePlace = () => {
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Enter a valid description of at least 5 characters"
-        onInput={() => {}}
-        value={identifiedPlace.description}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.description.value}
+        initialValid={formState.inputs.description.isValid}
       />
-      <Button type="submit" disabled={true}>UPDATE</Button>
+      <Button type="submit" disabled={!formState.isValid}>
+        UPDATE
+      </Button>
     </form>
   );
 };
