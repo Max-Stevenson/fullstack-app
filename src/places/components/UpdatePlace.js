@@ -43,13 +43,14 @@ const UpdatePlace = () => {
   }
 
   return (
-    <form>
+    <form className="place-form">
       <Input
         id="title"
         element="input"
         type="text"
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
+        errorText="Enter a valid Title"
         onInput={() => {}}
         value={identifiedPlace.title}
         valid={true}
@@ -59,6 +60,7 @@ const UpdatePlace = () => {
         element="textarea"
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
+        errorText="Enter a valid description of at least 5 characters"
         onInput={() => {}}
         value={identifiedPlace.description}
         valid={true}
