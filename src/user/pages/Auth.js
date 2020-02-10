@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Auth.css";
 import Card from "../../shared/components/UIElements/Card";
 import Input from "../../shared/components/FormElements/Input";
 import {
   VALIDATOR_EMAIL,
-  VALIDATOR_MINLENGTH
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_REQUIRE
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
 import Button from "../../shared/components/FormElements/Button";
 
 const Auth = () => {
-  const [formState, inputHandler] = useForm({
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [formState, inputHandler, setFormData] = useForm({
     email: { value: "", isValid: false },
     password: { value: "", isValid: false }
   });
+
+  const switchModeHandler = () => {
+    if (!isLoginMode) {
+      setFormData(
+        { ...formState, name: undefined },
+        formState.inputs.email.isValid && formState.inputs.password.isValid
+      );
+    } else {
+      setFormData(
+        { ...formState.inputs, name: { value: "", isValid: false } },
+        false
+      );
+    }
+    setIsLoginMode(prevMode => !prevMode);
+  };
 
   return (
     <Card className="authentication">
@@ -25,6 +42,17 @@ const Auth = () => {
           console.log(formState.inputs);
         }}
       >
+        {!isLoginMode && (
+          <Input
+            element="input"
+            id="name"
+            type="text"
+            label="name"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Please enter name"
+            onInput={inputHandler}
+          />
+        )}
         <Input
           element="input"
           id="email"
@@ -47,6 +75,9 @@ const Auth = () => {
           LOGIN
         </Button>
       </form>
+      <Button inverse onClick={switchModeHandler}>
+        SWITCH TO {isLoginMode ? "SIGNUP" : "LOGIN"}
+      </Button>
     </Card>
   );
 };
