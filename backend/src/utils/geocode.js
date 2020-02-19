@@ -1,5 +1,4 @@
 require("dotenv").config();
-const request = require("request");
 const MAPBOX_API = process.env.MAPBOX_API;
 const axios = require("axios");
 
