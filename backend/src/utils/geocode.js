@@ -11,7 +11,7 @@ async function geocode(address) {
     MAPBOX_API;
   const res = await axios.get(geocoderUrl).then(res => res.data);
   if (res.features.length === 0) {
-    return next(new HttpError("Could not find coordinates for address", 400));
+    return(new HttpError("Could not find coordinates for address", 400));
   }
   const point = res.features[0].geometry;
 
