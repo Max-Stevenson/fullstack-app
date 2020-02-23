@@ -69,7 +69,7 @@ const createPlace = async (req, res, next) => {
   let coordinates;
   try {
     coordinates = await geocode(address);
-  } catch {
+  } catch (error) {
     return next(error);
   }
 
