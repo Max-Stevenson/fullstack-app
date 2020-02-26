@@ -1,7 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const HttpError = require("./models/http-error");
 const mongoose = require("mongoose");
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
@@ -23,7 +25,7 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect()
+  .connect(`mongodb+srv://fullAccess01:${DB_PASSWORD}@fullstackapp-i2ixf.mongodb.net/places?retryWrites=true&w=majority`)
   .then(() => {
     app.listen(5000, () => {
       console.log("Server up on port 5000");
