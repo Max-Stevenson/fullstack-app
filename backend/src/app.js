@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const HttpError = require("./models/http-error");
+const mongoose = require("mongoose");
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
@@ -17,10 +18,17 @@ app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
   }
-  res.status(error.code || 500)
+  res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occurred" });
 });
 
-app.listen(5000, () => {
-  console.log("Server up on port 5000");
-});
+mongoose
+  .connect()
+  .then(() => {
+    app.listen(5000, () => {
+      console.log("Server up on port 5000");
+    });
+  })
+  .catch(error => {
+    console.log(error);
+  });
