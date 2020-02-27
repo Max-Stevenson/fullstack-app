@@ -10,3 +10,5 @@ const placeSchema = new Schema({
   location: { type: [Number], required: true},
   creator:  { type: String, required: true },
 });
+
+module.exports = mongoose.model('Place', placeSchema);
