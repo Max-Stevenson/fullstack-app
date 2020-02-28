@@ -29,9 +29,7 @@ let DUMMY_PLACES = [
 
 const getPlaceById = (req, res, next) => {
   const placeId = req.params.pid;
-  const place = DUMMY_PLACES.find(p => {
-    return p.id === placeId;
-  });
+  const place = Place.findById(placeId);
 
   if (!place) {
     return next(
