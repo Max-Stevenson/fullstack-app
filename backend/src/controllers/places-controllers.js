@@ -2,7 +2,7 @@ const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const geocode = require("../utils/geocode");
 const uuid = require("uuid/v4");
-const Place = require('../models/place');
+const Place = require("../models/place");
 
 let DUMMY_PLACES = [
   {
@@ -27,9 +27,17 @@ let DUMMY_PLACES = [
   }
 ];
 
-const getPlaceById = (req, res, next) => {
+const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
-  const place = Place.findById(placeId);
+  let place;
+
+  try {
+    place = await Place.findById(placeId);
+  } catch (error) {
+    return next(
+      new HttpError("Something went wrong, could not find a place", 500)
+    );
+  }
 
   if (!place) {
     return next(
@@ -37,7 +45,7 @@ const getPlaceById = (req, res, next) => {
     );
   }
 
-  res.json({ place });
+  res.json({ place: place.toObject({ getters: true }) });
 };
 
 const getPlacesByUserId = (req, res, next) => {
@@ -77,14 +85,15 @@ const createPlace = async (req, res, next) => {
     description,
     address,
     location: coordinates,
-    image: 'https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg',
+    image:
+      "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
     creator
   });
 
   try {
     await createdPlace.save();
-  } catch(error) {
-    return next(new HttpError('Creating place failed, please try again', 500));
+  } catch (error) {
+    return next(new HttpError("Creating place failed, please try again", 500));
   }
 
   res.status(201).json({ place: createdPlace });
