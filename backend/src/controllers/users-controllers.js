@@ -49,7 +49,7 @@ const signup = async (req, res, next) => {
     email,
     image: "https://avatars1.githubusercontent.com/u/42982560?s=460&v=4",
     password,
-    places
+    places: []
   });
 
   try {
