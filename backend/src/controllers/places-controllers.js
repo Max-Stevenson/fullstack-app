@@ -4,7 +4,7 @@ const geocode = require("../utils/geocode");
 const uuid = require("uuid/v4");
 const Place = require("../models/place");
 const User = require("../models/user");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 let DUMMY_PLACES = [
   {
@@ -164,15 +164,24 @@ const deletePlace = async (req, res, next) => {
   let place;
 
   try {
-    place = await Place.findById(placeId);
+    place = await Place.findById(placeId).populate("creator");
   } catch (error) {
     return next(
       new HttpError("Something went wrong, could not delete place", 500)
     );
   }
 
+  if (!place) {
+    return next(new HttpError("Could not find a place with that id", 404));
+  }
+
   try {
-    await place.remove();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await place.remove({ session: sess });
+    place.creator.places.pull(place);
+    await place.creator.save({ session: sess });
+    await sess.commitTransaction();
   } catch (error) {
     return next(
       new HttpError("Something went wrong, could not delete place", 500)
