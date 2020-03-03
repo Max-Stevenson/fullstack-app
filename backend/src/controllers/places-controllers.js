@@ -1,33 +1,9 @@
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const geocode = require("../utils/geocode");
-const uuid = require("uuid/v4");
 const Place = require("../models/place");
 const User = require("../models/user");
 const mongoose = require("mongoose");
-
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Empire State Building",
-    description: "Very famous building in New York",
-    imageUrl:
-      "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
-    address: "20 W 34th St, New York, NY 10001, United States",
-    location: [-73.9856644, 40.7484405],
-    creator: "u1"
-  },
-  {
-    id: "p2",
-    title: "Empire State Building",
-    description: "Very famous building in New York",
-    imageUrl:
-      "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
-    address: "20 W 34th St, New York, NY 10001, United States",
-    location: [-73.9856644, 40.7484405],
-    creator: "u2"
-  }
-];
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
