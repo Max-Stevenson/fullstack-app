@@ -9,8 +9,8 @@ import {
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
 import Button from "../../shared/components/FormElements/Button";
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
 
 const Auth = () => {
@@ -57,60 +57,69 @@ const Auth = () => {
         });
 
         const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
         console.log(responseData);
         setIsLoading(false);
         auth.login();
       } catch (err) {
         setIsLoading(false);
         setError(err.message || "Something went wrong, please try again");
-        console.log(err);
       }
     }
   };
 
+  const errorHandler = () => {
+    setError(null);
+  };
+
   return (
-    <Card className="authentication">
-      {isLoading && <LoadingSpinner asOverlay/>}
-      <h2>Login Required</h2>
-      <hr />
-      <form onSubmit={authSubmitHandler}>
-        {!isLoginMode && (
+    <React.Fragment>
+      <ErrorModal error={error} onClear={errorHandler} />
+      <Card className="authentication">
+        {isLoading && <LoadingSpinner asOverlay />}
+        <h2>Login Required</h2>
+        <hr />
+        <form onSubmit={authSubmitHandler}>
+          {!isLoginMode && (
+            <Input
+              element="input"
+              id="name"
+              type="text"
+              label="name"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="Please enter name"
+              onInput={inputHandler}
+            />
+          )}
           <Input
             element="input"
-            id="name"
-            type="text"
-            label="name"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText="Please enter name"
+            id="email"
+            type="email"
+            label="Email"
+            validators={[VALIDATOR_EMAIL()]}
+            errorText="Please enter valid email"
             onInput={inputHandler}
           />
-        )}
-        <Input
-          element="input"
-          id="email"
-          type="email"
-          label="Email"
-          validators={[VALIDATOR_EMAIL()]}
-          errorText="Please enter valid email"
-          onInput={inputHandler}
-        />
-        <Input
-          element="input"
-          id="password"
-          type="password"
-          label="Password"
-          validators={[VALIDATOR_MINLENGTH(5)]}
-          errorText="Please enter password of at least 5 characters"
-          onInput={inputHandler}
-        />
-        <Button type="Submit" disabled={!formState.isValid}>
-          LOGIN
+          <Input
+            element="input"
+            id="password"
+            type="password"
+            label="Password"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            errorText="Please enter password of at least 5 characters"
+            onInput={inputHandler}
+          />
+          <Button type="Submit" disabled={!formState.isValid}>
+            LOGIN
+          </Button>
+        </form>
+        <Button inverse onClick={switchModeHandler}>
+          SWITCH TO {isLoginMode ? "SIGNUP" : "LOGIN"}
         </Button>
-      </form>
-      <Button inverse onClick={switchModeHandler}>
-        SWITCH TO {isLoginMode ? "SIGNUP" : "LOGIN"}
-      </Button>
-    </Card>
+      </Card>
+    </React.Fragment>
   );
 };
 
