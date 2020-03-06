@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-
-  const sendRequest = async (
+  
+  const activeHttpRequests = useRef([]);
+  
+  const sendRequest = useCallback( async (
     url,
     method = "GET",
     body = null,
@@ -22,8 +24,22 @@ export const useHttpClient = () => {
       if (!response.ok) {
         throw new Error(responseData.message);
       }
+
+      return responseData;
     } catch (err) {
       setError(err.message)
     }
+    setIsLoading(false);
+  }), [];
+
+  const clearError = () => {
+    setError(null);
   };
+
+  return {
+    isLoading,
+    error,
+    sendRequest,
+    clearError
+  }
 };
