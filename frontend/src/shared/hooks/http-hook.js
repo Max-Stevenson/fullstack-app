@@ -39,7 +39,11 @@ export const useHttpClient = () => {
     setError(null);
   };
 
-  useEffect(() => {}, )
+  useEffect(() => {
+    return () => {
+      activeHttpRequests.current.forEach((abortCtrl => abortCtrl.abort()));
+    };
+  }, [])
 
   return {
     isLoading,
