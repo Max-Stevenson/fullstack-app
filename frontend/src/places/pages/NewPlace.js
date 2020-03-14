@@ -7,6 +7,7 @@ import {
   VALIDATOR_MINLENGTH
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const NewPlace = () => {
   const [formState, inputHandler] = useForm({
@@ -28,7 +29,7 @@ const NewPlace = () => {
 
   const placeSubmitHandler = (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
+
   };
 
   return (
