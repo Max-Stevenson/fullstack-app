@@ -10,26 +10,33 @@ import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const NewPlace = () => {
-  const [formState, inputHandler] = useForm({
-    title: {
-      value: "",
-      isValid: false
+  const { isLoading, sendRequest, error, clearError } = useHttpClient();
+  const [formState, inputHandler] = useForm(
+    {
+      title: {
+        value: "",
+        isValid: false
+      },
+      description: {
+        value: "",
+        isValid: false
+      },
+      address: {
+        value: "",
+        isValid: false
+      }
     },
-    description: {
-      value: "",
-      isValid: false
-    },
-    address: {
-      value: "",
-      isValid: false
-    }
-  }, false);
+    false
+  );
 
-  
-
-  const placeSubmitHandler = (event) => {
+  const placeSubmitHandler = event => {
     event.preventDefault();
-
+    sendRequest("http://localhost:5000/api/places", "POST", JSON.stringify({
+      title: formState.inputs.title.value,
+      description: formState.inputs.description.value,
+      address: formState.inputs.address.value,
+      creator: 
+    }));
   };
 
   return (
