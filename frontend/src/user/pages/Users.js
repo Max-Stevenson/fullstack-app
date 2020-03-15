@@ -17,7 +17,6 @@ const Users = () => {
 
         setLoadedUsers(responseData.users);
       } catch (err) {
-        setError(err.message);
       }
     };
     fetchUsers();
