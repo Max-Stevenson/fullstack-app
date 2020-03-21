@@ -12,8 +12,7 @@ import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const UpdatePlace = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const placeId = useParams().placeId;
+  
   const [formState, inputHandler, setFormData] = useForm(
     {
       title: { value: "", isValid: false },
