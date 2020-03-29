@@ -1,12 +1,24 @@
-import React, {useRef} from "react";
+import React, { useRef, useState } from "react";
 import Button from "./Button";
 import "./ImageUpload.css";
 
 const ImageUpload = props => {
+  const [file, setFile] = useState();
+  const [preview, setPreview] = useState();
+  const [isValid, setIsValid] = useState(false);
+
   const filePickerRef = useRef();
 
   const pickedHandler = event => {
-    console.log(event.target);
+    let pickedFile;
+    if (event.target.files && event.target.files.length === 1) {
+      pickedFile = event.target.files[0];
+      setFile(pickedFile);
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+    props.onInput(props.id, pickedFile, isValid)
   };
 
   const pickImageHandler = () => {
@@ -25,9 +37,11 @@ const ImageUpload = props => {
       />
       <div className={`image-upload ${props.center && "center"}`}>
         <div className="image-upload__preview">
-          <img src="" alt="Preview"/>
+          <img src="" alt="Preview" />
         </div>
-        <Button type="button" onClick={pickImageHandler}>PICK IMAGE</Button>
+        <Button type="button" onClick={pickImageHandler}>
+          PICK IMAGE
+        </Button>
       </div>
     </div>
   );
