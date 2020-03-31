@@ -13,7 +13,7 @@ import Button from "../../shared/components/FormElements/Button";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -28,12 +28,19 @@ const Auth = () => {
   const switchModeHandler = () => {
     if (!isLoginMode) {
       setFormData(
-        { ...formState, name: undefined },
+        { ...formState, name: undefined, image: undefined },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
     } else {
       setFormData(
-        { ...formState.inputs, name: { value: "", isValid: false } },
+        {
+          ...formState.inputs,
+          name: {
+            value: "",
+            isValid: false,
+            image: { value: null, isValid: false }
+          }
+        },
         false
       );
     }
@@ -95,7 +102,9 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
-          {!isLoginMode && <ImageUpload center id="image" onInput={inputHandler} />}
+          {!isLoginMode && (
+            <ImageUpload center id="image" onInput={inputHandler} />
+          )}
           <Input
             element="input"
             id="email"
@@ -115,7 +124,7 @@ const Auth = () => {
             onInput={inputHandler}
           />
           <Button type="Submit" disabled={!formState.isValid}>
-            LOGIN
+            {isLoginMode ? 'LOGIN' : 'SIGNUP'}
           </Button>
         </form>
         <Button inverse onClick={switchModeHandler}>
