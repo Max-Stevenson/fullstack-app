@@ -37,7 +37,7 @@ const signup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image: "https://avatars1.githubusercontent.com/u/42982560?s=460&v=4",
+    image: req.file.path,
     password,
     places: []
   });
