@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const HttpError = require("./models/http-error");
 const mongoose = require("mongoose");
 const DB_PASSWORD = process.env.DB_PASSWORD;
+const fs = require('fs');
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
@@ -26,10 +27,16 @@ app.use((req, res, next) => {
   throw error;
 });
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
   if (res.headerSent) {
     return next(error);
   }
-  res.status(500);
+
+  res.status(typeof error.code === 'number' ? error.code : 500);
   res.json({ message: error.message || "An unknown error occurred" });
 });
 
