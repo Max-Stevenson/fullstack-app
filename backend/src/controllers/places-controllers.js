@@ -4,6 +4,7 @@ const geocode = require("../utils/geocode");
 const Place = require("../models/place");
 const User = require("../models/user");
 const mongoose = require("mongoose");
+const fs = require('fs');
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
@@ -150,6 +151,8 @@ const deletePlace = async (req, res, next) => {
     return next(new HttpError("Could not find a place with that id", 404));
   }
 
+  const imagePath = place.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -162,6 +165,10 @@ const deletePlace = async (req, res, next) => {
       new HttpError("Something went wrong, could not delete place", 500)
     );
   }
+
+  fs.unlink(imagePath, (err) => {
+    console.log(err);
+  })
 
   res.status(200).json({ message: "Deleted place." });
 };
