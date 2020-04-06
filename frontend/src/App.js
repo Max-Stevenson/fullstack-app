@@ -17,9 +17,9 @@ const App = () => {
   const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  const login = useCallback(userId, token => {
+  const login = useCallback((uid, token) => {
     setToken(token);
-    setUserId(userId);
+    setUserId(uid);
   }, []);
 
   const logout = useCallback(() => {
