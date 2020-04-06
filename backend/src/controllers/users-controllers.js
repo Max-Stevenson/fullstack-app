@@ -75,7 +75,7 @@ const signup = async (req, res, next) => {
     return next(new HttpError("Signup failed, please try again.", 500));
   }
 
-  res.status(201).json({ user: createdUser.id, email: createdUser.email, token: token });
+  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token: token });
 };
 
 const login = async (req, res, next) => {
@@ -109,8 +109,8 @@ const login = async (req, res, next) => {
   try {
     token = jwt.sign(
       {
-        userId: createdUser.id,
-        email: createdUser.email
+        userId: existingUser.id,
+        email: existingUser.email
       },
       TOKEN,
       { expiresIn: "1h" }
@@ -119,7 +119,7 @@ const login = async (req, res, next) => {
     return next(new HttpError("login failed, please try again.", 500));
   }
 
-  res.status(200).json({ user: createdUser.id, email: createdUser.email, token: token });
+  res.status(200).json({ userId: existingUser.id, email: existingUser.email, token: token });
 };
 
 exports.getUsers = getUsers;
