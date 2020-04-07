@@ -4,15 +4,23 @@ const TOKEN = process.env.TOKEN;
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    console.log('nexted');
+    return next();
+  }
+
   try {
-    const token = req.header.authorization.split(" ")[1];
+    const token = req.headers.authorization.split(" ")[1];
     if (!token) {
-      throw new Error("Authentication failed.");
+      console.log('no token');
+      throw new Error("Authentication failed one.");
     }
     const decodedToken = jwt.verify(token, TOKEN);
+    console.log(decodedToken);
     req.userData = { userId: decodedToken.userId };
     next();
   } catch (err) {
-    return next(new HttpError("Authentication failed.", 401));
+    console.log(err);
+    return next(new HttpError("Authentication failed two.", 401));
   }
 };
