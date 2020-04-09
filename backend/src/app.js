@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const HttpError = require("./models/http-error");
 const mongoose = require("mongoose");
 const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_NAME = process.env.DB_NAME;
+const DB_USER = process.env.DB_USER
 const fs = require('fs');
 const path = require('path');
 
@@ -46,7 +48,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    `mongodb+srv://fullAccess01:${DB_PASSWORD}@fullstackapp-i2ixf.mongodb.net/mern?retryWrites=true&w=majority`
+    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@fullstackapp-i2ixf.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
   )
   .then(() => {
     app.listen(5000, () => {
