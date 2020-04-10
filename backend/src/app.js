@@ -51,7 +51,7 @@ mongoose
     `mongodb+srv://${DB_USER}:${DB_PASSWORD}@fullstackapp-i2ixf.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
   )
   .then(() => {
-    app.listen(5000, () => {
+    app.listen(process.env.PORT || 5000, () => {
       console.log("Server up on port 5000");
     });
   })
