@@ -5,7 +5,7 @@ let fs = require('fs-extra');
 const MIME_TYPE_MAP = {
   'image/png': 'png',
   'image/jpeg': 'jpeg',
-  'image/jp': 'jpg'
+  'image/jpg': 'jpg'
 };
 
 const fileUpload = multer({
